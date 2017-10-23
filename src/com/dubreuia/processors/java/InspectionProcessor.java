@@ -7,7 +7,6 @@ import com.intellij.codeInspection.GlobalInspectionContext;
 import com.intellij.codeInspection.GlobalInspectionTool;
 import com.intellij.codeInspection.InspectionEngine;
 import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.InspectionProfileEntry;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.QuickFix;
@@ -35,22 +34,24 @@ class InspectionProcessor implements Processor {
 
     private final Action action;
 
-    private final InspectionProfileEntry inspectionTool;
+    private final InspectionToolWrapper toolWrapper;
 
-    InspectionProcessor(Project project, PsiFile psiFile, Storage storage, Action action, LocalInspectionTool inspectionTool) {
+    InspectionProcessor(Project project, PsiFile psiFile, Storage storage, Action action,
+                        LocalInspectionTool inspectionTool) {
         this.project = project;
         this.psiFile = psiFile;
         this.storage = storage;
         this.action = action;
-        this.inspectionTool = inspectionTool;
+        this.toolWrapper = new LocalInspectionToolWrapper(inspectionTool);
     }
 
-    InspectionProcessor(Project project, PsiFile psiFile, Storage storage, Action action, GlobalInspectionTool inspectionTool) {
+    InspectionProcessor(Project project, PsiFile psiFile, Storage storage, Action action,
+                        GlobalInspectionTool inspectionTool) {
         this.project = project;
         this.psiFile = psiFile;
         this.storage = storage;
         this.action = action;
-        this.inspectionTool = inspectionTool;
+        this.toolWrapper = new GlobalInspectionToolWrapper(inspectionTool);
     }
 
     @Override
@@ -72,7 +73,7 @@ class InspectionProcessor implements Processor {
 
     @Override
     public String toString() {
-        return toStringBuilder(inspectionTool.getShortName(), storage.isEnabled(action));
+        return toStringBuilder(toolWrapper.getShortName(), storage.isEnabled(action));
     }
 
     private class InspectionWriteQuickFixesAction extends WriteCommandAction.Simple {
@@ -85,16 +86,6 @@ class InspectionProcessor implements Processor {
         protected void run() {
             InspectionManager inspectionManager = InspectionManager.getInstance(project);
             GlobalInspectionContext context = inspectionManager.createNewGlobalContext(false);
-            InspectionToolWrapper toolWrapper;
-
-            if (inspectionTool instanceof LocalInspectionTool) {
-                toolWrapper = new LocalInspectionToolWrapper((LocalInspectionTool) inspectionTool);
-            } else if (inspectionTool instanceof GlobalInspectionTool) {
-                toolWrapper = new GlobalInspectionToolWrapper((GlobalInspectionTool) inspectionTool);
-            } else {
-                //this never happens in the current state of the code, since we only allow constructors for the two types
-                throw new UnsupportedOperationException("Either Local or Global inspection tool is required");
-            }
 
             List<ProblemDescriptor> problemDescriptors;
             try {
@@ -121,6 +112,7 @@ class InspectionProcessor implements Processor {
                 }
             }
         }
+
     }
 
 }
