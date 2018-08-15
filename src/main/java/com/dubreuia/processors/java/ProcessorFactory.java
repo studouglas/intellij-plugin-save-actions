@@ -79,12 +79,14 @@ public enum ProcessorFactory {
             Project project,
             PsiFile psiFile,
             Storage storage) {
+        LocalCanBeFinal inspection = new LocalCanBeFinal();
+        inspection.REPORT_IMPLICIT_FINALS = false;
         return new InspectionProcessor(
                 project,
                 psiFile,
                 storage,
                 localCanBeFinal,
-                new LocalCanBeFinal());
+                inspection);
     }
 
     @NotNull
