@@ -34,8 +34,11 @@ public enum JavaProcessor {
     fieldCanBeFinal(Action.fieldCanBeFinal,
             FieldMayBeFinalInspection::new),
 
-    localCanBeFinal(Action.localCanBeFinal,
-            LocalCanBeFinal::new),
+    localCanBeFinal(Action.localCanBeFinal, () -> {
+        LocalCanBeFinal inspection = new LocalCanBeFinal();
+        inspection.REPORT_IMPLICIT_FINALS = false;
+        return inspection;
+    }),
 
     methodMayBeStatic(Action.methodMayBeStatic,
             MethodMayBeStaticInspection::new),
