@@ -27,17 +27,19 @@ intellij {
 
 // Add plugin group and version
 group 'com.dubreuia'
-version '100.0.0-stuart'
+version '100.0.1-stuart'
 
 // Add only maven central as repository
 repositories {
     mavenCentral()
 }
 
-// Add dependencies to junit5 api (annotations) and engine (runtime)
+// Add dependencies to fest, junit5 api (annotations) and engine (runtime)
 dependencies {
-    testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+    testCompile("org.assertj:assertj-core:3.11.0")
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+    testCompile 'org.junit.jupiter:junit-jupiter-params:5.2.0'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
 }
 
 // Activate junit since gradle 4.7

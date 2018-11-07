@@ -6,7 +6,6 @@ import com.intellij.psi.PsiFile;
 
 import static com.dubreuia.core.component.SaveActionManager.LOGGER;
 import static com.dubreuia.model.Action.organizeImports;
-import static com.dubreuia.processors.ProcessorMessage.toStringBuilder;
 
 class OptimizeImportsProcessor extends com.intellij.codeInsight.actions.OptimizeImportsProcessor implements Processor {
 
@@ -14,8 +13,8 @@ class OptimizeImportsProcessor extends com.intellij.codeInsight.actions.Optimize
 
     private final Storage storage;
 
-    OptimizeImportsProcessor(Project project, PsiFile file, Storage storage) {
-        super(project, file);
+    OptimizeImportsProcessor(Project project, PsiFile psiFile, Storage storage) {
+        super(project, psiFile);
         this.storage = storage;
     }
 
@@ -37,7 +36,7 @@ class OptimizeImportsProcessor extends com.intellij.codeInsight.actions.Optimize
 
     @Override
     public String toString() {
-        return toStringBuilder(NAME, storage.isEnabled(organizeImports));
+        return toString(NAME, storage.isEnabled(organizeImports));
     }
 
 }

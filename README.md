@@ -1,7 +1,10 @@
 # Save Actions Plugin
 
 [![Jetbrains Plugin](./docs/badge-jetbrains-website.svg)](https://plugins.jetbrains.com/plugin/7642-save-actions)
-[![Travis Build Status](https://travis-ci.org/dubreuia/intellij-plugin-save-actions.svg?branch=master)](https://travis-ci.org/dubreuia/intellij-plugin-save-actions)
+[![Travis CI Build Status](https://travis-ci.org/dubreuia/intellij-plugin-save-actions.svg?branch=master)](https://travis-ci.org/dubreuia/intellij-plugin-save-actions)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/dubreuia/intellij-plugin-save-actions?branch=master&svg=true)](https://ci.appveyor.com/project/dubreuia/intellij-plugin-save-actions)
+[![Codecov Code Coverage](https://codecov.io/gh/dubreuia/intellij-plugin-save-actions/branch/master/graph/badge.svg)](https://codecov.io/gh/dubreuia/intellij-plugin-save-actions)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/dubreuia/intellij-plugin-save-actions)
 
 Supports configurable, Eclipse like, save actions, including "optimize imports", "reformat code", "rearrange code", "compile file" and some quick fixes like "add / remove 'this' qualifier", etc. The plugin executes the configured actions when the file is synchronised (or saved) on disk.
 
@@ -9,10 +12,27 @@ Using the save actions plugin makes your code cleaner and more uniform across yo
 
 The code style applied by the save actions plugin is the one configured your settings at "File > Settings > Editor > Code Style". For some languages, custom formatter may also be triggered by the save actions plugin. For example for Dart developers, enable "Use the dartfmt tool when formatting the whole file" option in "File > Settings > Editor > Code Style > Dart > Dartfmt".
 
+## Content
+
+- [Features](#features)
+- [Compatibility](#compatibility)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Actions](#actions)
+- [Eclipse support](#eclipse-support)
+- [Files location](#files-location)
+- [Contributing](#contributing)
+- [Jetbrains plugin page](#jetbrains-plugin-page)
+- [Issues](#issues)
+- [Licence](#licence)
+
 ## Features
+
+### All Jetbrains products
 
 - Optimize imports
 - Run on file save or shortcut (or both)
+- Run on multiple files by choosing a scope
 - Reformat code (whole file or only changed text)
 - Rearrange code (reorder methods, fields, etc.)
 - Include / exclude files with regex support
@@ -22,11 +42,11 @@ The code style applied by the save actions plugin is the one configured your set
 
 ![Save actions plugin settings page](https://github.com/dubreuia/intellij-plugin-save-actions/blob/master/docs/intellij-save-actions-plugin-settings-page.png)
 
-## Java features
+### Java IDE products
 
 Works in JetBrains IDE with Java support, like Intellij IDEA and AndroidStudio.
 
-- Eclipse configuration file `.epf` support (see [IDE support](#ide-support))
+- Eclipse configuration file `.epf` support (see [Eclipse support](#eclipse-support))
 - Automatically fix Java inspections (see [Java quick fixes](#java-fixes))
 
 ![Save actions plugin settings page for Java](https://github.com/dubreuia/intellij-plugin-save-actions/blob/master/docs/intellij-save-actions-plugin-settings-page-java.png)
@@ -88,7 +108,7 @@ You can quickly toggle the plugin activation by using the "Enable Save Action" a
 | ---                                | ---
 | Compile file                       | Enable / disable compiling of the modified file. The compiler might compile other files as well
 
-### Configuration
+### File
 
 | Name                               | Description
 | ---                                | ---
@@ -128,11 +148,30 @@ Save actions are grouped under the menu "Code > Save Actions". Remember that any
 - **Execute Save Actions on shortcut (default: "CTRL + SHIFT + S")** will trigger the plugin manually, only if the configuration allows shortcuts (see [activation](#activation) section, the "Activate save actions on shortcut" needs to be enabled)
 - **Execute Save Actions on multiple files (default: not binded)** will show a popup to select the files (or a scope) on which to trigger the plugin
 
-## IDE support
+<p align="center">
+  <img src="./docs/intellij-save-actions-plugin-action-menu.png" width="371" height="77">
+</p>
 
-The save-actions plugin supports Eclipse configuration `.epf` files (Java IDE only). You can specify a path to an Eclipse configuration file in the "IDE Support" section to import it. The plugin will load the content of the file in the plugin configuration, and disable the plugin configuration options (the checkbox will be grayed out). Use the "reset" button to remove the import.
+## Eclipse support
 
-You can find an example of [an Eclipse configuration `.epf` file](src/test/resources/example.epf) in the test resources.
+The save-actions plugin supports Eclipse configuration `.epf` files (Java IDE only). You can specify a path to an Eclipse configuration file in the "Eclipse support" settings section to import it. The plugin will load the content of the file in the plugin configuration, and disable the plugin configuration options (the checkbox will be grayed out). Use the "reset" button to remove the import.
+
+The plugin will stay in sync with your Eclipse configuration file. Not every features are present on either side, but the ones that are in common are supported.
+
+You can find an example of [an Eclipse configuration `.epf` file](src/test/resources/com/dubreuia/model) in the test resources.
+
+```properties
+# @title Save Actions
+# @description Save Actions
+# @task_type LASTMOD
+file_export_version=3.0
+/instance/org.eclipse.jdt.ui/editor_save_participant_org.eclipse.jdt.ui.postsavelistener.cleanup=true
+/instance/org.eclipse.jdt.ui/sp_cleanup.format_source_code=true
+/instance/org.eclipse.jdt.ui/sp_cleanup.format_source_code_changes_only=false
+/instance/org.eclipse.jdt.ui/sp_cleanup.organize_imports=true
+/instance/org.eclipse.jdt.ui/sp_cleanup.remove_trailing_whitespaces=true
+...
+```
 
 ## Files location
 
@@ -175,13 +214,9 @@ To contribute, submit a PR without modifying the plugin version. Before sending,
 
 ## Jetbrains plugin page
 
-The plugin is in the [JetBrains plugin repository](https://plugins.jetbrains.com/plugin/7642-save-actions).
+The plugin is in the [JetBrains plugin repository](https://plugins.jetbrains.com/plugin/7642-save-actions), please take the time to [rate it](https://plugins.jetbrains.com/plugin/7642-save-actions)! 
 
-## Rate this plugin
-
-Please take the time to [rate the plugin](https://plugins.jetbrains.com/plugin/7642-save-actions)!
-
-## Bugs / features
+## Issues
 
 The plugin does not work? You want more features? You can [ask me on twitter](https://twitter.com/dubreuia) or [create an issue on github](https://github.com/dubreuia/intellij-plugin-save-actions/issues).
 

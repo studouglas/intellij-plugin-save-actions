@@ -4,10 +4,14 @@ import com.dubreuia.core.ExecutionMode;
 
 import java.util.Comparator;
 
+import static java.text.MessageFormat.format;
+
 /**
  * Processor interface with main method {@link #run()}.
  */
 public interface Processor {
+
+    String FORMAT = "{0} ({1})";
 
     /**
      * Makes the change to the underlying document. The method might or might not be async. For now,
@@ -46,6 +50,10 @@ public interface Processor {
             return o1.getOrder() < o2.getOrder() ? -1 : 1;
         }
 
+    }
+
+    default String toString(String name, boolean enabled) {
+        return format(FORMAT, name, enabled);
     }
 
 }

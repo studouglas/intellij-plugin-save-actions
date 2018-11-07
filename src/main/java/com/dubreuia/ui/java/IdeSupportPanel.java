@@ -9,10 +9,10 @@ import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBLabel;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import static com.dubreuia.core.SaveActionFactory.JAVA_AVAILABLE;
 import static com.intellij.openapi.ui.TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT;
@@ -22,7 +22,7 @@ import static com.intellij.openapi.ui.TextComponentAccessor.TEXT_FIELD_WHOLE_TEX
  */
 public class IdeSupportPanel {
 
-    private static final String TITLE = "IDE support";
+    private static final String TITLE = "Eclipse support";
     private static final String LABEL = "Use external Eclipse configuration file (.epf)";
     private static final String BUTTON = "Reset";
 
@@ -72,12 +72,7 @@ public class IdeSupportPanel {
     @NotNull
     private JButton getResetButton(TextFieldWithBrowseButton path) {
         JButton reset = new JButton(BUTTON);
-        reset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                path.setText("");
-            }
-        });
+        reset.addActionListener(e -> path.setText(""));
         return reset;
     }
 

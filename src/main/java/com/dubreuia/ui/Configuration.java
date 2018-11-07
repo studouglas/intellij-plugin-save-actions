@@ -1,8 +1,8 @@
 package com.dubreuia.ui;
 
 import com.dubreuia.model.Action;
-import com.dubreuia.model.EpfStorage;
 import com.dubreuia.model.Storage;
+import com.dubreuia.model.epf.EpfStorage;
 import com.dubreuia.ui.java.IdeSupportPanel;
 import com.dubreuia.ui.java.InspectionPanel;
 import com.intellij.openapi.components.ServiceManager;
@@ -11,10 +11,14 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -29,6 +33,7 @@ import static com.dubreuia.model.Action.reformat;
 import static com.dubreuia.model.Action.reformatChangedCode;
 import static com.dubreuia.model.Action.unqualifiedStaticMemberAccess;
 
+
 public class Configuration implements Configurable {
 
     private static final String TEXT_DISPLAY_NAME = "Save Actions";
@@ -37,23 +42,15 @@ public class Configuration implements Configurable {
 
     private final Set<String> exclusions = new HashSet<>();
     private final Set<String> inclusions = new HashSet<>();
-
     private final Map<Action, JCheckBox> checkboxes = new HashMap<>();
-
     private final ActionListener checkboxActionListener = this::updateCheckboxEnabled;
 
     private GeneralPanel generalPanel;
-
     private FormattingPanel formattingPanel;
-
     private BuildPanel buildPanel;
-
     private InspectionPanel inspectionPanel;
-
     private FileMaskPanel fileMasksExclusionPanel;
-
     private FileMaskPanel fileMasksInclusionPanel;
-
     private IdeSupportPanel ideSupport;
 
     public Configuration(Project project) {
@@ -175,23 +172,42 @@ public class Configuration implements Configurable {
     }
 
     private JPanel initRootPanel(JPanel general, JPanel actions, JPanel build, JPanel inspections,
-            JPanel fileMasksInclusions, JPanel fileMasksExclusions,
-            JPanel ideSupport) {
+                                 JPanel fileMasksInclusions, JPanel fileMasksExclusions,
+                                 JPanel ideSupport) {
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.NORTH;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1;
+        c.gridx = 0;
 
-        panel.add(general);
-        panel.add(actions);
-        panel.add(build);
-        panel.add(inspections);
+        c.gridy = 0;
+        panel.add(general, c);
+        c.gridy = 1;
+        panel.add(actions, c);
+        c.gridy = 2;
+        panel.add(build, c);
+        c.gridy = 3;
+        panel.add(inspections, c);
 
         JPanel fileMaskPanel = new JPanel();
         fileMaskPanel.setLayout(new BoxLayout(fileMaskPanel, BoxLayout.LINE_AXIS));
         fileMaskPanel.add(fileMasksInclusions);
+        fileMaskPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         fileMaskPanel.add(fileMasksExclusions);
-        panel.add(fileMaskPanel);
+        c.gridy = 4;
+        panel.add(fileMaskPanel, c);
 
-        panel.add(ideSupport);
+        c.gridy = 5;
+        panel.add(ideSupport, c);
+
+        c.gridy = 6;
+        c.weighty = 1;
+        c.fill = GridBagConstraints.BOTH;
+        JPanel filler = new JPanel();
+        filler.setOpaque(false);
+        panel.add(filler, c);
 
         return panel;
     }
